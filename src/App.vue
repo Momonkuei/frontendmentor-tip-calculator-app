@@ -3,7 +3,9 @@
     <div class="mb-[5rem]">
       <img src="../src/assets/images/logo.svg" alt="" />
     </div>
-    <div class="container max-w-[57.5rem] bg-white rounded-[1.5625rem] p-8 flex gap-[3rem]">
+    <div
+      class="container max-w-[57.5rem] bg-white lg:rounded-[1.5625rem] p-8 flex gap-[3rem] lg:flex-row flex-col"
+    >
       <left-box :tipRate="tipRate" @update:tipRate="(value) => (tipRate = value)"></left-box>
       <div class="w-full bg-[#00474B] rounded-[0.9375rem] p-10">
         <div class="flex flex-col justify-between h-full">
@@ -35,11 +37,13 @@ const totalResult = ref(0)
 const tipAmount = ref(0)
 const totalForPerson = ref(0)
 const empty = ref(true)
+const restState = ref(false)
 
 provide('bill', bill)
 provide('people', people)
 provide('tipRate', tipRate)
 provide('empty', empty)
+provide('restState', restState)
 
 const updateResult = () => {
   if (bill.value > 0 && people.value > 0 && tipRate.value >= 0) {
@@ -59,6 +63,7 @@ const rest = () => {
   tipAmount.value = 0
   totalForPerson.value = 0
   empty.value = true
+  restState.value = true
 }
 
 watch([bill, people, tipRate], () => {

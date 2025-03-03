@@ -16,8 +16,9 @@
           class="text-2xl text-[#00474B] font-bold bg-transparent text-end w-full px-4 py-[0.375rem] border-2 border-transparent focus:border-[#26C2AE] outline-none rounded-[0.3125rem]"
           type="text"
           name="billValue"
-          rules="notEmpty"
+          :rules="restState ? '' : 'notEmpty'"
           v-model="bill"
+          @input="resetValidation"
         />
         <!-- 顯示錯誤訊息 -->
       </div>
@@ -41,6 +42,7 @@
           class="bg-[#F3F9FA] text-2xl text-[#00474B] font-bold text-end w-full px-4 py-[0.375rem] border-2 border-transparent focus:border-[#26C2AE] outline-none rounded-[0.3125rem] placeholder:text-[#00474B]"
           v-model="validatedTipRate"
           name="localTipRate"
+          @input="resetValidation"
         />
       </div>
     </div>
@@ -61,8 +63,9 @@
           class="text-2xl text-[#00474B] font-bold bg-transparent text-end w-full px-4 py-[0.375rem] border-2 border-transparent focus:border-[#26C2AE] outline-none rounded-[0.3125rem]"
           type="text"
           name="peopleValue"
-          rules="notEmpty"
+          :rules="restState ? '' : 'notEmpty'"
           v-model="people"
+          @input="resetValidation"
         />
         <!-- 顯示錯誤訊息 -->
       </div>
@@ -81,6 +84,7 @@ import IconPerson from '@/assets/images/icon-person.svg?url'
 const bill = inject('bill')
 const people = inject('people')
 const empty = inject('empty')
+const restState = inject('restState')
 const inputTipRate = ref(null)
 
 const { setFieldError, validateField } = useForm() // 取得 resetForm 方法
@@ -95,6 +99,7 @@ const selectedTip = ref(props.tipRate) // 記錄當前選中的 Tip %
 const setTip = (rate) => {
   selectedTip.value = rate
   emit('update:tipRate', rate)
+  resetValidation()
 }
 
 watch(empty, async (newVal) => {
@@ -121,6 +126,10 @@ watch(inputTipRate, (newVal) => {
     emit('update:tipRate', newVal)
   }
 })
+
+const resetValidation = () => {
+  restState.value = false
+}
 
 defineRule('notEmpty', (value) => {
   if (value === null || value === undefined || value === '' || value.toString().trim() === '') {
